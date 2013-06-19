@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    
+    <title>steve.js</title>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/three.js/r58/three.min.js"></script>
+    <script type="text/javascript" src="scripts/steve.js"></script>
+    <style type="text/css">
+      canvas {
+        background: #f0f;
+      }
+    </style>
+  </head>
+  <body>
+    <fieldset id="avatar_controls">
+      <legend>Avatar</legend>
+      
+      <label for="avatar_skin">Skin</label>
+      <select id="avatar_skin">
+        <option value="data/char.png">(default)</option>
+      </select><br>
+      
+      <label for="avatar_rotation">Rotation</label>
+      <input id="avatar_rotation" type="range" min="-180" max="180">
+      
+      <p>Hint: You can even drag an image from your computer to preview it as a skin. Dropping things that aren't Minecraft skins has undefined behavior.</p>
+    </fieldset>
+    <fieldset id="pose_controls">
+      <legend>Posing</legend>
+      
+      <label for="pose_joint">Joint</label>
+      <select id="pose_joint"></select><br>
+      
+      <label for="pose_joint_x">X&deg;</label>
+      <input id="pose_joint_x" type="range" min="-180" max="180"><br>
+      
+      <label for="pose_joint_y">Y&deg;</label>
+      <input id="pose_joint_y" type="range" min="-180" max="180"><br>
+      
+      <label for="pose_joint_z">Z&deg;</label>
+      <input id="pose_joint_z" type="range" min="-180" max="180"><br>
+      
+      <button id="pose_joint_reset">reset joint</button>
+      <button id="pose_reset">reset pose</button>
+    </fieldset>
+  </body>
+</html>
