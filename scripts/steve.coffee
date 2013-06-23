@@ -2,7 +2,7 @@
 
 THREE.ImageUtils.crossOrigin = ''
 
-[width, height] = [600, 600]
+[width, height] = [480, 640]
 
 scene = new THREE.Scene()
 scene.add new THREE.AmbientLight(0xCCCCCC)
@@ -12,7 +12,7 @@ light.position.set 0, 3, 10
 scene.add light
 
 camera = new THREE.PerspectiveCamera(45, width / height, 1, 100)
-camera.position.set 0, 3, 5
+camera.position.set 0, 2, 4
 camera.lookAt scene.position
 
 renderer = new THREE.WebGLRenderer()
@@ -74,14 +74,11 @@ buildModel = do ->
         child = buildModel subdata
         part.add child
     
-    if data.name?
-      part.name = data.name
-      avatar.parts[data.name] = part
-    
+    part.name = data.name if data.name?
     part.position.set data.offset... if data.offset?
     part
 
-avatar =
+@steve =
   parts: {}
   skin: skin
   model: do ->
@@ -91,95 +88,8 @@ avatar =
     model
   
   loadSkin: (url) ->
-    avatar.skin.image.src = url
+    @skin.image.src = url
     return
-
-attachUI = (avatar) ->
-  rad = (deg) -> deg / 180 * Math.PI
-  
-  resetUI = ->
-    if part = avatar.parts[jointField.value]
-      xField.value = part.rotation.x
-      yField.value = part.rotation.y
-      zField.value = part.rotation.z
-    else
-      xField.value = 0
-      yField.value = 0
-      zField.value = 0
-  
-  skinField = document.getElementById 'avatar_skin'
-  skinField.onchange = -> avatar.loadSkin skinField.value
-  
-  rotationField = document.getElementById 'avatar_rotation'
-  rotationField.onchange = ->
-    avatar.model.rotation.y = rad rotationField.valueAsNumber
-  
-  xField = document.getElementById 'pose_joint_x'
-  xField.onchange = ->
-    if part = avatar.parts[jointField.value]
-      part.rotation.x = rad xField.valueAsNumber
-  
-  yField = document.getElementById 'pose_joint_y'
-  yField.onchange = ->
-    if part = avatar.parts[jointField.value]
-      part.rotation.y = rad yField.valueAsNumber
-  
-  zField = document.getElementById 'pose_joint_z'
-  zField.onchange = ->
-    if part = avatar.parts[jointField.value]
-      part.rotation.z = rad zField.valueAsNumber
-  
-  jointField = document.getElementById 'pose_joint'
-  jointField.onchange = -> resetUI()
-  
-  for name, part of avatar.parts
-    opt = document.createElement 'option'
-    opt.value = name
-    opt.textContent = name
-    jointField.appendChild opt
-  
-  document.getElementById('pose_joint_reset').onclick = ->
-    if part = avatar.parts[jointField.value]
-      part.rotation.set 0, 0, 0
-    resetUI()
-  
-  document.getElementById('pose_reset').onclick = ->
-    for name, part of avatar.parts
-      part.rotation.set 0, 0, 0
-    resetUI()
-  
-  draggedImageItem = null
-  
-  document.body.ondragover = (event) ->
-    event.stopPropagation()
-    event.preventDefault()
-    event.dataTransfer.dropEffect = 'copy'
-  
-  document.body.ondrop = (event) ->
-    event.stopPropagation()
-    event.preventDefault()
-    
-    file = event.dataTransfer.files?[0]
-    return unless file?.type is 'image/png'
-    
-    reader = new FileReader
-    reader.onload = (event) ->
-      url = event.target.result
-      
-      unless draggedImageItem
-        draggedImageItem = document.createElement 'option'
-        if skinField.childElementCount < 2
-          skinField.appendChild draggedImageItem
-        else
-          skinField.insertBefore draggedImageItem, skinField.children[1]
-      
-      draggedImageItem.value = url
-      draggedImageItem.textContent = "(dragged image: #{file.name})"
-      
-      skinField.value = url
-      avatar.loadSkin url
-    
-    reader.readAsDataURL file
 
 draw = ->
   requestAnimationFrame draw
@@ -195,9 +105,9 @@ getJSON = (url, func) ->
   xhr
 
 document.addEventListener "DOMContentLoaded", ((event) ->
-  getJSON 'data/steve.json', (steve) ->
-    avatar.model.add buildModel steve
-    attachUI avatar
+  getJSON 'data/steve.json', (json) ->
+    steve.model.add buildModel json
+    steve.attachUI?()
   
   getJSON 'skins/skins.json', (skins) ->
     return unless skins.length > 0

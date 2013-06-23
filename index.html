@@ -6,14 +6,17 @@
     <title>steve.js</title>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/three.js/r58/three.min.js"></script>
     <script type="text/javascript" src="scripts/steve.js"></script>
+    <script type="text/javascript" src="scripts/steve-ui.js"></script>
     <style type="text/css">
-      canvas {
-        background: #f0f;
+      .controls {
+        float: right;
+        clear: right;
+        width: 200px;
       }
     </style>
   </head>
   <body>
-    <fieldset id="avatar_controls">
+    <fieldset id="avatar_controls" class="controls">
       <legend>Avatar</legend>
       
       <label for="avatar_skin">Skin</label>
@@ -26,22 +29,27 @@
       
       <p>Hint: You can even drag an image from your computer to preview it as a skin. Dropping things that aren't Minecraft skins has undefined behavior.</p>
     </fieldset>
-    <fieldset id="pose_controls">
+    <fieldset id="pose_controls" class="controls">
       <legend>Posing</legend>
       
       <label for="pose_joint">Joint</label>
-      <select id="pose_joint"></select><br>
+      <select id="pose_joint">
+        <option value="">(none)</option>
+      </select><br>
+        
+      <div id="pose_joint_controls">
+        <label for="pose_joint_x" style="color:#7F0000">X&deg;</label>
+        <input id="pose_joint_x" type="range" min="-180" max="180"><br>
+        
+        <label for="pose_joint_y" style="color:#007F00">Y&deg;</label>
+        <input id="pose_joint_y" type="range" min="-180" max="180"><br>
+        
+        <label for="pose_joint_z" style="color:#00007F">Z&deg;</label>
+        <input id="pose_joint_z" type="range" min="-180" max="180"><br>
+        
+        <button id="pose_joint_reset">reset joint</button>
+      </div>
       
-      <label for="pose_joint_x">X&deg;</label>
-      <input id="pose_joint_x" type="range" min="-180" max="180"><br>
-      
-      <label for="pose_joint_y">Y&deg;</label>
-      <input id="pose_joint_y" type="range" min="-180" max="180"><br>
-      
-      <label for="pose_joint_z">Z&deg;</label>
-      <input id="pose_joint_z" type="range" min="-180" max="180"><br>
-      
-      <button id="pose_joint_reset">reset joint</button>
       <button id="pose_reset">reset pose</button>
     </fieldset>
   </body>
